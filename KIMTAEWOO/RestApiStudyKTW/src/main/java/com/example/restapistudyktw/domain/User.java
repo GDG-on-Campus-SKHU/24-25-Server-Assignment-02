@@ -3,7 +3,6 @@ package com.example.restapistudyktw.domain;
 import lombok.Builder;
 import lombok.Getter;
 
-
 @Getter
 public class User {
     private String userId;

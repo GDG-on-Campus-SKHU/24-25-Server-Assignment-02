@@ -2,7 +2,7 @@ package com.example.restapistudyktw.dto;
 
 import com.example.restapistudyktw.domain.User;
 import lombok.Builder;
-import lombok.Data;
+
 
 /*
 DTO 객체는 계층 간에 데이터를 전달하기 위해 사용되는 객체이다. DTO를 사용하는 이유는
@@ -10,7 +10,6 @@ DTO 객체는 계층 간에 데이터를 전달하기 위해 사용되는 객체
 2. 데이터의 구조가 변경되어도 도메인 객체를 건드리지 않을 수 있어 유연성과 확장성이 좋다
 3. 클린 코드 관점에서 도메인 객체와 책임이 분리되 있기 때문에 사용하면 좋다
  */
-@Data
 public class UserDto {
     private String userId;
     private String userPassword;
@@ -53,6 +52,36 @@ public class UserDto {
                 .build();
     }
 
+    public String getUserId() {
+        return userId;
+    }
 
+    public String getUserPassword() {
+        return userPassword;
+    }
+
+    public String getUserPasswordConfirm() {
+        return userPasswordConfirm;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public String getUserPhoneNumber() {
+        return userPhoneNumber;
+    }
+
+    public int getUserAge() {
+        return userAge;
+    }
+
+    public String getUserAddress() {
+        return userAddress;
+    }
 }
 
