@@ -43,10 +43,11 @@ public class AlumController {
     public MentoDto showMentoById(@PathVariable Long id) {
         return alumService.showMentoById(id);
     }
+    // 멘티의 major 수정
     @PatchMapping("alum/{id}/mentee/{major}")
     public void updateMenteeMajorById(@PathVariable Long id, @PathVariable String major) {
         alumService.updateMenteeMajorById(id, major);
-    }
+    } //멘토의 job 수정
     @PatchMapping("alum/{id}/mento/{job}")
     public void updateMenteeJobById(@PathVariable Long id, @PathVariable String job) {
         alumService.updateMentoJobById(id, job);
