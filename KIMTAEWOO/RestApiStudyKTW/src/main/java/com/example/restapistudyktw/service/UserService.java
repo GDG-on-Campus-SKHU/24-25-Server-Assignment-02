@@ -28,11 +28,17 @@ public class UserService {
     }
 
     // 유저 저장 혹은 정보 변경 전 정보를 검증하는 메서드
+    /*
+    verification : 무엇을 만드는 '과정' 을 잘 지켰는가?
+    validation : 무언가를 최종적으로 만든 결과물이 잘 나왔는가?
+     */
     public void verification(User user) {
         User existingUser = userRepository.findByUserId(user.getUserId());
 
         // 1. ID 중복 여부 확인 (똑같은 ID로 변경을 요청하는 경우는 허용)
-        if (existingUser != null && !userRepository.usersContainsUserId(existingUser.getUserId())) {
+        // 1-1. existingUser != null : 해당 userId가 이미 저장소에 존재하는지 확인. null이라면 이미 유저가 존재한다는 뜻이므로 예외 던짐
+        // 1-2. !existingUser.getUserId().equals(user.getUserId())) : existingUser 와 user의 userId가 같다면, 이는 자기 자신의 userId를 수정하려는 경우이므로 통과시킴
+        if (existingUser != null && !existingUser.getUserId().equals(user.getUserId())) {
             throw new IllegalArgumentException("이미 존재하는 아이디입니다");
         }
 
