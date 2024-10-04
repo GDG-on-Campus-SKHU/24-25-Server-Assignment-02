@@ -24,7 +24,7 @@ public class UserDto {
     @Builder 어노테이션이 해주는 역할
     필드들을 단계별로 설정할 수 있는 '빌더 클래스' 생성
     이로 인해 원하는 필드의 값만 선택적으로 초기화한 객체 생성 가능
-     */
+ G    */
     @Builder
     public UserDto (String userId, String userPassword, String userPasswordConfirm
             , String userName, String userEmail, String userPhoneNumber, int userAge, String userAddress) {

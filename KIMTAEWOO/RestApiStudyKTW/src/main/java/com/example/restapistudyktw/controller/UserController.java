@@ -23,14 +23,9 @@ public class UserController {
     // 유저 저장
     @PostMapping("/user")
     public ResponseEntity<String> saveUser(@RequestBody User user) {
-        try {
-            userService.saveUser(user);
-            return new ResponseEntity<>("유저 저장 완료", HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (Exception e) {
-            return new ResponseEntity<>("서버 에러가 발생해 저장에 실패했습니다", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        userService.saveUser(user);
+        return new ResponseEntity<>("유저 저장 완료", HttpStatus.CREATED);
+
     }
 
     // userID로 유저 찾기
@@ -41,57 +36,32 @@ public class UserController {
     적절한 형식으로 바꿔서 반환 해 준다.
     */
     // 찾기 성공시 userDto 반환, 실패시 안내문구 반환
+    // 성공시 객체를 반환하고 실패시 예외 처리 로직을통해 String을 반환해야 하므로 ResponseEntity<?> 을 유지했습니다.
     public ResponseEntity<?> findUserByUserId(@PathVariable String userId) {
-        try {
-            UserDto userDto = userService.findUserByUserId(userId);
-            return new ResponseEntity<>(userDto, HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (Exception e) {
-            // 그외 오류시 공통 로유 메세지 반환
-            return new ResponseEntity<>("서버 에러가 발생해 조회에 실패했습니다", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        UserDto userDto = userService.findUserByUserId(userId);
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
-
 
     // 전체 유저 조회
     @GetMapping("/user/list")
     // 조회 성공시 List<UserDto> 반환, 실패시 안내문구 반환
     public ResponseEntity<?> findAllUser() {
-        try {
-            List<UserDto> resultUsers = userService.findAllUsers();
-            return new ResponseEntity<>(resultUsers, HttpStatus.OK);
-        } catch(IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (Exception e) {
-            return new ResponseEntity<>("서버 에러가 발생해 찾기에 실패했습니다", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        List<UserDto> resultUsers = userService.findAllUsers();
+        return new ResponseEntity<>(resultUsers, HttpStatus.OK);
     }
 
     // userId로 유저 정보 업데이트
     @PatchMapping("/user/{userId}")
     public ResponseEntity<String> updateUserByUserId(@PathVariable String userId, @RequestBody UserDto userDto) {
-        try {
-            userService.updateUserByUserId(userId, userDto);
-            return new ResponseEntity<>("유저 정보 업데이트 성공", HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (Exception e) {
-            return new ResponseEntity<>("서버 에러가 발생해 업데이트에 실패했습니다", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        userService.updateUserByUserId(userId, userDto);
+        return new ResponseEntity<>("유저 정보 업데이트 성공", HttpStatus.OK);
     }
 
     // 유저 삭제
     @DeleteMapping("/user/{userId}")
     public ResponseEntity<String> deleteUserByUserId(@PathVariable String userId) {
-        try {
-            userService.deleteUserByUserId(userId);
-            return new ResponseEntity<>("유저 삭제 성공", HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (Exception e) {
-            return new ResponseEntity<>("서버 에러가 발생해 삭제 실패했습니다", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        userService.deleteUserByUserId(userId);
+        return new ResponseEntity<>("유저 삭제 성공", HttpStatus.OK);
     }
 }
 
