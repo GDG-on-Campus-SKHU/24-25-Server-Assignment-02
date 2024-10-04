@@ -32,12 +32,35 @@ public class UserService {
     verification : 무엇을 만드는 '과정' 을 잘 지켰는가?
     validation : 무언가를 최종적으로 만든 결과물이 잘 나왔는가?
      */
-    public void verification(User user) {
+    public void saveVerification(User user) {
         User existingUser = userRepository.findByUserId(user.getUserId());
 
         // 1. ID 중복 여부 확인 (똑같은 ID로 변경을 요청하는 경우는 허용)
         // 1-1. existingUser != null : 해당 userId가 이미 저장소에 존재하는지 확인. null이라면 이미 유저가 존재한다는 뜻이므로 예외 던짐
         // 1-2. !existingUser.getUserId().equals(user.getUserId())) : existingUser 와 user의 userId가 같다면, 이는 자기 자신의 userId를 수정하려는 경우이므로 통과시킴
+        if (existingUser != null && !existingUser.getUserId().equals(user.getUserId())) {
+            throw new IllegalArgumentException("이미 존재하는 아이디입니다");
+        }
+
+        // 2. 비밀번호, 비밀번호 확인 일치여부 확인
+        if (!user.getUserPassword().equals(user.getUserPasswordConfirm())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
+        // 3.이미 존재하는 userId로 save요청을 날릴 경우 나머지 필드가 업데이트되는 것을 방지하기 위한 검증
+        if(userRepository.usersContainsUserId(user.getUserId())) {
+            throw new IllegalArgumentException("이미 존재하는 아이디입니다");
+        }
+    }
+
+    public void updateVerification(User user) {
+        User existingUser = userRepository.findByUserId(user.getUserId());
+
+        // 존재하지 않는 유저를 업데이트하려는 경우 검증
+        if(!userRepository.usersContainsUserId(user.getUserId())) {
+            throw new IllegalArgumentException("유저를 찾을 수 없습니다.");
+        }
+
         if (existingUser != null && !existingUser.getUserId().equals(user.getUserId())) {
             throw new IllegalArgumentException("이미 존재하는 아이디입니다");
         }
@@ -63,10 +86,7 @@ public class UserService {
     }
 
     public void saveUser(User user) {
-        verification(user);
-        if(userRepository.usersContainsUserId(user.getUserId())) {
-            throw new IllegalArgumentException("이미 존재하는 아이디입니다");
-        }
+        saveVerification(user);
         userRepository.save(user);
     }
 
@@ -101,10 +121,7 @@ public class UserService {
 
     public void updateUserByUserId(String userId, UserDto userDto) {
         User user = userDto.toEntity();
-        if(!userRepository.usersContainsUserId(userId)) {
-            throw new IllegalArgumentException("유저를 찾을 수 없습니다.");
-        }
-        verification(user);
+        updateVerification(user);
         userRepository.updateByUserId(userId, user);
 
     }
