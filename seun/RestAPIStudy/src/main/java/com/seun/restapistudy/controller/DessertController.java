@@ -1,8 +1,8 @@
 package com.seun.restapistudy.controller;
 
 import com.seun.restapistudy.domain.Dessert;
+import com.seun.restapistudy.dto.DessertDto;
 import com.seun.restapistudy.service.DessertService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,14 +15,13 @@ public class DessertController {
 
     private final DessertService dessertService;
 
-    @Autowired
     public DessertController(DessertService dessertService) {
         this.dessertService = dessertService;
     }
 
     @PostMapping
-    public ResponseEntity<Void> addDessert(@RequestBody Dessert dessert) {
-        dessertService.addDessert(dessert);
+    public ResponseEntity<Void> addDessert(@RequestBody DessertDto dessertDTO) {
+        dessertService.addDessert(dessertDTO);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -42,14 +41,7 @@ public class DessertController {
     public ResponseEntity<List<Dessert>> searchDesserts(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String type) {
-        List<Dessert> desserts;
-        if (name != null) {
-            desserts = dessertService.getDessertsByName(name);
-        } else if (type != null) {
-            desserts = dessertService.getDessertsByType(type);
-        } else {
-            return ResponseEntity.badRequest().build();
-        }
+        List<Dessert> desserts = dessertService.searchDesserts(name, type);
         return ResponseEntity.ok(desserts);
     }
 
@@ -76,8 +68,8 @@ public class DessertController {
             @PathVariable Long id,
             @RequestParam(required = false) String newName,
             @RequestParam(required = false) String newDescription,
-            @RequestParam(required = false) Double newPrice,
-            @RequestParam(required = false) Integer newCalories) {
+            @RequestParam(required = false) Long newPrice,
+            @RequestParam(required = false) Long newCalories) {
         dessertService.updateDessert(id, newName, newDescription, newPrice, newCalories);
         return ResponseEntity.ok().build();
     }

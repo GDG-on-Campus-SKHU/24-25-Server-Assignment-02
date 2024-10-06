@@ -19,12 +19,9 @@ public class MemoryDessertRepository implements DessertRepository {
     }
 
     @Override
-    public Dessert findById(Long id) {
+    public Optional<Dessert> findById(Long id) {
         Dessert dessert = dessertMap.get(id);
-        if (dessert == null) {
-            throw new NoSuchElementException("디저트를 찾을 수 없습니다: " + id);
-        }
-        return dessert;
+        return Optional.ofNullable(dessert);
     }
 
     @Override
@@ -33,17 +30,12 @@ public class MemoryDessertRepository implements DessertRepository {
     }
 
     @Override
-    public List<Dessert> findByName(String name) {
-        return dessertMap.values().stream()
-                .filter(dessert -> dessert.getName().equalsIgnoreCase(name))
+    public Optional<List<Dessert>> findByNameOrType(String name, String type) {
+        List<Dessert> results = dessertMap.values().stream()
+                .filter(dessert -> (dessert.getName().equalsIgnoreCase(name)) ||
+                        (dessert.getType().equalsIgnoreCase(type)))
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Dessert> findByType(String type) {
-        return dessertMap.values().stream()
-                .filter(dessert -> dessert.getType().equalsIgnoreCase(type))
-                .collect(Collectors.toList());
+        return Optional.ofNullable(results.isEmpty() ? null : results);
     }
 
     @Override

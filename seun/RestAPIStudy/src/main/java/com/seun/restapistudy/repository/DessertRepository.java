@@ -3,17 +3,16 @@ package com.seun.restapistudy.repository;
 import com.seun.restapistudy.domain.Dessert;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface DessertRepository {
     void save(Dessert dessert);
 
-    Dessert findById(Long id);
+    Optional<Dessert> findById(Long id);
 
     List<Dessert> findAll();
 
-    List<Dessert> findByName(String name);
-
-    List<Dessert> findByType(String type);
+    Optional<List<Dessert>> findByNameOrType(String name, String type);
 
     boolean existsById(Long id);
 
